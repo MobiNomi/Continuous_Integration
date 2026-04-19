@@ -1,0 +1,32 @@
+name: CI Workflow #name of the workflow
+
+on: #events that trigger the workflow
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs: #jobs to run, each job runs in a fresh instance of the virtual environment
+  test:
+    runs-on: ubuntu-latest  #os linux is used beacause it is the most common environment for python projects
+
+    steps: #steps to run in the job
+    - name: Checkout code
+      uses: actions/checkout@v2 #checkout the code from the repository to the runner
+
+    - name: Set up Python 
+      uses: actions/setup-python@v2   #set up the python environment on the runner
+      with:
+        python-version: '3.9' 
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest streamlit
+
+    - name: Run tests #run the tests using pytest
+      run: |
+        pytest _test.py   
+        # run the tests in the _test.py file, you can change this to your test file or directory
